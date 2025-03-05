@@ -1,0 +1,5 @@
+/dist/
+/node_modules/
+.eslintcache
+debug.log
+pnpm-lock.yaml
