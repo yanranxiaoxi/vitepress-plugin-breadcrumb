@@ -1,0 +1,31 @@
+stages:
+  - publish
+
+#########################
+#        Publish        #
+#########################
+
+publish-npm:
+  stage: publish
+  tags:
+    - linux
+    - docker
+  image: docker.io/library/node:23
+  rules:
+    - if: $CI_COMMIT_TAG
+  script:
+    - npm config set "//registry.npmjs.org/:_authToken"=${NPM_AUTH_TOKEN}
+    - npm publish --registry=https://registry.npmjs.org/ --access=public
+
+release:
+  stage: publish
+  tags:
+    - linux
+    - docker
+    - amd64
+  image: registry.gitlab.com/gitlab-org/release-cli:latest
+  rules:
+    - if: $CI_COMMIT_TAG
+  dependencies: []
+  script:
+    - release-cli create --name "Release $CI_COMMIT_TAG" --tag-name $CI_COMMIT_TAG

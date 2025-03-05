@@ -1,5 +1,6 @@
 /dist/
 /node_modules/
 .eslintcache
+.gitlab-ci.yml
 debug.log
 pnpm-lock.yaml
