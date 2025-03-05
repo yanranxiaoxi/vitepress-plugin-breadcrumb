@@ -40,7 +40,7 @@ importers:
         specifier: ^15.4.3
         version: 15.4.3
       prettier:
-        specifier: ^3.4.2
+        specifier: ^3.5.3
         version: 3.5.3
       typescript:
         specifier: ^5.8.2
