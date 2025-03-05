@@ -1,6 +1,7 @@
 /.husky/
 /.vscode/
 /node_modules/
+/src/
 /.editorconfig
 /.eslintcache
 /.eslintrc.js
@@ -9,3 +10,5 @@
 /.prettierignore
 /.prettierrc.js
 /pnpm-lock.yaml
+/tsconfig.json
+/vite.config.ts

@@ -1,7 +1,7 @@
 module.exports = {
 	plugins: ['unicorn'],
 	extends: ['alloy', 'alloy/typescript'],
-	ignorePatterns: ['/node_modules/'],
+	ignorePatterns: ['/dist/', '/node_modules/'],
 	parserOptions: {
 		'ecmaVersion': 'latest',
 		'sourceType': 'module',

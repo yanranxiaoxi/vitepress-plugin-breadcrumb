@@ -6,5 +6,5 @@
 		"source.fixAll.eslint": "explicit"
 	},
 	"prettier.requireConfig": true,
-	"cSpell.words": ["Frontmatter", "trivago", "vitepress"]
+	"cSpell.words": ["eslintcache", "Frontmatter", "trivago", "vite", "vitepress"]
 }

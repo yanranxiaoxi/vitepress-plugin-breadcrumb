@@ -1,6 +1,6 @@
 {
 	"name": "vitepress-plugin-breadcrumb",
-	"version": "1.0.4",
+	"version": "1.0.5",
 	"description": "Add Breadcrumb navigation to your Vitepress",
 	"author": "XiaoXi <admin@soraharu.com>",
 	"license": "MIT",
@@ -17,18 +17,9 @@
 		"plugin",
 		"breadcrumb"
 	],
-	"types": "src/index.d.ts",
-	"files": [
-		"src"
-	],
-	"module": "./src/vitepress-plugin-breadcrumb.es.mjs",
-	"exports": {
-		".": {
-			"types": "./src/index.d.ts",
-			"import": "./src/vitepress-plugin-breadcrumb.es.mjs"
-		},
-		"./Breadcrumb.vue": "./src/Breadcrumb.vue"
-	},
+	"types": "./dist/types/index.d.ts",
+	"main": "./dist/vitepress-plugin-breadcrumb.umd.js",
+	"module": "./dist/vitepress-plugin-breadcrumb.es.js",
 	"peerDependencies": {
 		"vitepress": "^1.4.0 || ^2.0.0",
 		"vue": "^3.5.0"
@@ -37,6 +28,7 @@
 		"@trivago/prettier-plugin-sort-imports": "^5.2.2",
 		"@typescript-eslint/eslint-plugin": "^7.18.0",
 		"@typescript-eslint/parser": "^7.18.0",
+		"@vitejs/plugin-vue": "^5.2.1",
 		"eslint": "^8.57.1",
 		"eslint-config-alloy": "^5.1.2",
 		"eslint-plugin-unicorn": "^56.0.1",
@@ -44,6 +36,8 @@
 		"lint-staged": "^15.4.3",
 		"prettier": "^3.5.3",
 		"typescript": "^5.8.2",
+		"vite": "^6.2.0",
+		"vite-plugin-dts": "^4.5.3",
 		"vitepress": "^1.6.3",
 		"vue": "^3.5.13"
 	},
@@ -51,7 +45,8 @@
 		"init": "pnpm install && husky && pnpm run preinstall",
 		"preinstall": "npx only-allow pnpm",
 		"prepare": "husky || true",
-		"fix": "eslint --cache --fix . && prettier --write ."
+		"fix": "eslint --cache --fix . && prettier --write .",
+		"build": "vite build"
 	},
 	"lint-staged": {
 		"*.{js,ts,mts}": "eslint --cache --fix",
