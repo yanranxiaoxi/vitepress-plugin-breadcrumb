@@ -1,6 +1,6 @@
 {
 	"name": "vitepress-plugin-breadcrumb",
-	"version": "1.0.3",
+	"version": "1.0.4",
 	"description": "Add Breadcrumb navigation to your Vitepress",
 	"author": "XiaoXi <admin@soraharu.com>",
 	"license": "MIT",
@@ -43,7 +43,9 @@
 		"husky": "^9.1.7",
 		"lint-staged": "^15.4.3",
 		"prettier": "^3.5.3",
-		"typescript": "^5.8.2"
+		"typescript": "^5.8.2",
+		"vitepress": "^1.6.3",
+		"vue": "^3.5.13"
 	},
 	"scripts": {
 		"init": "pnpm install && husky && pnpm run preinstall",
