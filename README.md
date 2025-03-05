@@ -4,6 +4,8 @@
 
 Add Breadcrumb navigation to your Vitepress
 
+🔗 [GitLab (Homepage)](https://gitlab.soraharu.com/XiaoXi/vitepress-plugin-breadcrumb) | 🔗 [GitHub](https://github.com/yanranxiaoxi/vitepress-plugin-breadcrumb)
+
 ## Installing
 
 ```shell

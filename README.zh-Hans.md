@@ -4,6 +4,8 @@
 
 为你的 Vitepress 添加面包屑导航
 
+🔗 [GitLab (Homepage)](https://gitlab.soraharu.com/XiaoXi/vitepress-plugin-breadcrumb) | 🔗 [GitHub](https://github.com/yanranxiaoxi/vitepress-plugin-breadcrumb)
+
 ## 安装
 
 ```shell
