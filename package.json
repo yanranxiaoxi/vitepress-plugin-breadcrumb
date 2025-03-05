@@ -1,6 +1,6 @@
 {
 	"name": "vitepress-plugin-breadcrumb",
-	"version": "1.0.2",
+	"version": "1.0.3",
 	"description": "Add Breadcrumb navigation to your Vitepress",
 	"author": "XiaoXi <admin@soraharu.com>",
 	"license": "MIT",
@@ -30,8 +30,8 @@
 		"./Breadcrumb.vue": "./src/Breadcrumb.vue"
 	},
 	"peerDependencies": {
-		"vitepress": "^1.6.3",
-		"vue": "^3.5.13"
+		"vitepress": "^1.4.0 || ^2.0.0",
+		"vue": "^3.5.0"
 	},
 	"devDependencies": {
 		"@trivago/prettier-plugin-sort-imports": "^5.2.2",
