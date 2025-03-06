@@ -1,6 +1,7 @@
 /.husky/
 /.vscode/
 /node_modules/
+/src/
 /.editorconfig
 /.eslintcache
 /.eslintrc.js

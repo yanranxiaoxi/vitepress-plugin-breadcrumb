@@ -17,7 +17,7 @@ npm install vitepress-plugin-breadcrumb
 In `.vitepress/theme/index.ts` file:
 
 ```typescript
-import { Breadcrumb } from 'vitepress-plugin-breadcrumb';
+import Breadcrumb from 'vitepress-plugin-breadcrumb/Breadcrumb.vue';
 import DefaultTheme from 'vitepress/theme';
 
 export default {
