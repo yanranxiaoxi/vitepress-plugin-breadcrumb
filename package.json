@@ -1,6 +1,6 @@
 {
 	"name": "vitepress-plugin-breadcrumb",
-	"version": "1.0.6",
+	"version": "1.0.7",
 	"description": "Add Breadcrumb navigation to your Vitepress",
 	"author": "XiaoXi <admin@soraharu.com>",
 	"license": "MIT",
@@ -25,7 +25,8 @@
 			"types": "./dist/types/index.d.ts",
 			"import": "./dist/vitepress-plugin-breadcrumb.es.js",
 			"require": "./dist/vitepress-plugin-breadcrumb.umd.js"
-		}
+		},
+		"./Breadcrumb.vue": "./src/Breadcrumb.vue"
 	},
 	"peerDependencies": {
 		"vitepress": "^1.4.0 || ^2.0.0",
