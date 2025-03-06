@@ -56,8 +56,6 @@
 		"vue": "^3.5.13"
 	},
 	"scripts": {
-		"init": "pnpm install && husky && pnpm run preinstall",
-		"preinstall": "npx only-allow pnpm",
 		"prepare": "husky || true",
 		"fix": "eslint --cache --fix . && prettier --write .",
 		"build": "vite build"
