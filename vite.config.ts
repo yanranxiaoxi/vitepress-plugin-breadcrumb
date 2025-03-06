@@ -7,7 +7,6 @@ export default defineConfig({
 		vue(),
 		dts({
 			include: ['src/**/*'],
-			exclude: ['node_modules'],
 			insertTypesEntry: true,
 			rollupTypes: true,
 			outDir: 'dist/types',

@@ -1,6 +1,6 @@
 {
 	"name": "vitepress-plugin-breadcrumb",
-	"version": "1.0.5",
+	"version": "1.0.6",
 	"description": "Add Breadcrumb navigation to your Vitepress",
 	"author": "XiaoXi <admin@soraharu.com>",
 	"license": "MIT",
@@ -17,12 +17,23 @@
 		"plugin",
 		"breadcrumb"
 	],
-	"types": "./dist/types/index.d.ts",
 	"main": "./dist/vitepress-plugin-breadcrumb.umd.js",
 	"module": "./dist/vitepress-plugin-breadcrumb.es.js",
+	"types": "./dist/types/index.d.ts",
+	"exports": {
+		".": {
+			"types": "./dist/types/index.d.ts",
+			"import": "./dist/vitepress-plugin-breadcrumb.es.js",
+			"require": "./dist/vitepress-plugin-breadcrumb.umd.js"
+		}
+	},
 	"peerDependencies": {
 		"vitepress": "^1.4.0 || ^2.0.0",
 		"vue": "^3.5.0"
+	},
+	"dependencies": {
+		"vitepress": "^1.6.3",
+		"vue": "^3.5.13"
 	},
 	"devDependencies": {
 		"@trivago/prettier-plugin-sort-imports": "^5.2.2",
@@ -37,9 +48,7 @@
 		"prettier": "^3.5.3",
 		"typescript": "^5.8.2",
 		"vite": "^6.2.0",
-		"vite-plugin-dts": "^4.5.3",
-		"vitepress": "^1.6.3",
-		"vue": "^3.5.13"
+		"vite-plugin-dts": "^4.5.3"
 	},
 	"scripts": {
 		"init": "pnpm install && husky && pnpm run preinstall",
