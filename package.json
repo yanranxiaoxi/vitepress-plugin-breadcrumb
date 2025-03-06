@@ -64,7 +64,7 @@
 	},
 	"lint-staged": {
 		"*.{js,ts,mts}": "eslint --cache --fix",
-		"*.{vue,js,ts,mts,md,css}": "prettier --write"
+		"*.{vue,js,cjs,ts,mts,md,css}": "prettier --write"
 	},
 	"pnpm": {
 		"peerDependencyRules": {
