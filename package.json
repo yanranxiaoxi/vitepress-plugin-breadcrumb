@@ -1,9 +1,10 @@
 {
 	"name": "vitepress-plugin-breadcrumb",
-	"version": "1.0.8",
+	"version": "1.0.9",
 	"description": "Add Breadcrumb navigation to your Vitepress",
 	"author": "XiaoXi <admin@soraharu.com>",
 	"license": "MIT",
+	"type": "module",
 	"homepage": "https://github.com/yanranxiaoxi/vitepress-plugin-breadcrumb",
 	"repository": {
 		"type": "git",
@@ -16,6 +17,9 @@
 		"vitepress",
 		"plugin",
 		"breadcrumb"
+	],
+	"files": [
+		"dist"
 	],
 	"main": "./dist/vitepress-plugin-breadcrumb.umd.js",
 	"module": "./dist/vitepress-plugin-breadcrumb.es.mjs",
@@ -61,5 +65,13 @@
 	"lint-staged": {
 		"*.{js,ts,mts}": "eslint --cache --fix",
 		"*.{vue,js,ts,mts,md,css}": "prettier --write"
+	},
+	"pnpm": {
+		"peerDependencyRules": {
+			"ignoreMissing": [
+				"@algolia/client-search",
+				"search-insights"
+			]
+		}
 	}
 }

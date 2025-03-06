@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { DefaultTheme, onContentUpdated, useData, withBase } from 'vitepress';
+import { type DefaultTheme, onContentUpdated, useData, withBase } from 'vitepress';
 import { useSidebar } from 'vitepress/theme';
-import { PropType, Ref, ref } from 'vue';
+import { type PropType, type Ref, ref } from 'vue';
 
 const props = defineProps({
 	breadcrumb: {
