@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { type DefaultTheme, onContentUpdated, useData, withBase } from 'vitepress';
-import { useSidebar } from 'vitepress/theme';
+import { onContentUpdated, useData, withBase } from 'vitepress/client';
+import { type DefaultTheme, useSidebar } from 'vitepress/theme';
 import { type PropType, type Ref, ref } from 'vue';
 
 const props = defineProps({

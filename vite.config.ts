@@ -31,7 +31,7 @@ export default defineConfig({
 			formats: ['es', 'umd'],
 		},
 		rollupOptions: {
-			external: ['vue', 'vitepress', '@localSearchIndex', '@siteData'],
+			external: ['vue', 'vitepress', 'vitepress/client', 'vitepress/theme', '@localSearchIndex', '@siteData'],
 			output: {
 				globals: {
 					vue: 'Vue',
