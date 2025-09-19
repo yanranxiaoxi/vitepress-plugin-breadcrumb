@@ -18,7 +18,7 @@ export default defineConfig({
 		dts({
 			include: ['src/**/*'],
 			insertTypesEntry: true,
-			rollupTypes: true,
+			rollupTypes: false,
 			outDir: 'dist/types',
 		}),
 	],
@@ -36,6 +36,8 @@ export default defineConfig({
 				globals: {
 					vue: 'Vue',
 					vitepress: 'Vitepress',
+					'vitepress/client': 'VitepressClient',
+					'vitepress/theme': 'VitepressTheme',
 				},
 				preserveModules: false,
 			},

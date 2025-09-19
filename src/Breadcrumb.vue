@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { onContentUpdated, useData, withBase } from 'vitepress/client';
-import { type DefaultTheme, useSidebar } from 'vitepress/theme';
+import { type DefaultTheme, useLayout } from 'vitepress/theme';
 import { type PropType, type Ref, ref } from 'vue';
 
 const props = defineProps({
@@ -16,7 +16,7 @@ const props = defineProps({
 });
 
 const { frontmatter, page } = useData();
-const { sidebar } = useSidebar();
+const { sidebar } = useLayout();
 const breadcrumbHtml: Ref<string> = ref('');
 const gtSvg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256"><polygon points="79.093,0 48.907,30.187 146.72,128 48.907,225.813 79.093,256 207.093,128" /></svg>`;
 
