@@ -1,6 +1,6 @@
 {
 	"name": "vitepress-plugin-breadcrumb",
-	"version": "2.0.0",
+	"version": "2.0.1",
 	"description": "Add Breadcrumb navigation to your Vitepress",
 	"author": "XiaoXi <admin@soraharu.com>",
 	"license": "MIT",
