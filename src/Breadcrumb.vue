@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { onContentUpdated, useData, withBase } from 'vitepress/client';
 import { type DefaultTheme, useLayout } from 'vitepress/theme';
-import { type PropType, type Ref, ref } from 'vue';
+import { type PropType, type Ref, computed, ref } from 'vue';
 
 const props = defineProps({
 	breadcrumb: {
@@ -15,12 +15,25 @@ const props = defineProps({
 	},
 });
 
-const { frontmatter, page } = useData();
-const { sidebar } = useLayout();
+// 客户端检查，避免在 SSR 期间调用 VitePress API
+const isClient = typeof window !== 'undefined';
+
+const vpData = computed(() => {
+	if (!isClient) return { frontmatter: { value: {} }, page: { value: { filePath: '' } } };
+	return useData();
+});
+
+const vpLayout = computed(() => {
+	if (!isClient) return { sidebar: { value: [] } };
+	return useLayout();
+});
+
+const { frontmatter, page } = vpData.value;
+const { sidebar } = vpLayout.value;
 const breadcrumbHtml: Ref<string> = ref('');
 const gtSvg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256"><polygon points="79.093,0 48.907,30.187 146.72,128 48.907,225.813 79.093,256 207.093,128" /></svg>`;
 
-const breadcrumb = frontmatter.value.breadcrumb !== undefined ? frontmatter.value.breadcrumb : props.breadcrumb;
+const breadcrumb = (frontmatter.value as any).breadcrumb !== undefined ? (frontmatter.value as any).breadcrumb : props.breadcrumb;
 const breadcrumbHomeLink = typeof breadcrumb === 'object' ? breadcrumb.homeLink : undefined;
 const breadcrumbHomeText = typeof breadcrumb === 'object' ? breadcrumb.homeText : undefined;
 
@@ -80,7 +93,9 @@ if (breadcrumb === true || typeof breadcrumbHomeLink === 'string') {
 	};
 	generateBreadcrumb();
 
-	onContentUpdated(generateBreadcrumb);
+	if (isClient) {
+		onContentUpdated(generateBreadcrumb);
+	}
 } else {
 	breadcrumbHtml.value = '';
 }
