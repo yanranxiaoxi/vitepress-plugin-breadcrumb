@@ -1,10 +1,10 @@
 {
 	"name": "vitepress-plugin-breadcrumb",
-	"version": "2.0.1",
+	"type": "module",
+	"version": "2.0.2",
 	"description": "Add Breadcrumb navigation to your Vitepress",
 	"author": "XiaoXi <admin@soraharu.com>",
 	"license": "MIT",
-	"type": "module",
 	"homepage": "https://github.com/yanranxiaoxi/vitepress-plugin-breadcrumb",
 	"repository": {
 		"type": "git",
@@ -18,12 +18,6 @@
 		"plugin",
 		"breadcrumb"
 	],
-	"files": [
-		"dist"
-	],
-	"main": "./dist/vitepress-plugin-breadcrumb.umd.js",
-	"module": "./dist/vitepress-plugin-breadcrumb.es.mjs",
-	"types": "./dist/types/index.d.ts",
 	"exports": {
 		".": {
 			"types": "./dist/types/index.d.ts",
@@ -35,43 +29,52 @@
 			"import": "./dist/Breadcrumb.vue"
 		}
 	},
+	"main": "./dist/vitepress-plugin-breadcrumb.umd.js",
+	"module": "./dist/vitepress-plugin-breadcrumb.es.mjs",
+	"types": "./dist/types/index.d.ts",
+	"files": [
+		"dist"
+	],
+	"scripts": {
+		"preinstall": "npx only-allow pnpm",
+		"lint": "eslint",
+		"fix": "eslint --fix",
+		"build": "vite build",
+		"dev": "vite build --watch",
+		"dev:build": "vite build --watch --mode development"
+	},
 	"peerDependencies": {
+		"vitepress": "^1.6.0 || ^2.0.0-alpha.12",
 		"vue": "^3.5.0"
 	},
 	"devDependencies": {
-		"@bassist/eslint-config": "^0.3.0",
-		"@trivago/prettier-plugin-sort-imports": "^5.2.2",
-		"@types/node": "^24.5.2",
-		"@typescript-eslint/eslint-plugin": "^8.44.0",
-		"@typescript-eslint/parser": "^8.44.0",
+		"@antfu/eslint-config": "^5.4.1",
+		"@types/node": "^24.7.0",
 		"@vitejs/plugin-vue": "^6.0.1",
-		"eslint": "^9.35.0",
-		"eslint-plugin-unicorn": "^61.0.2",
-		"husky": "^9.1.7",
-		"lint-staged": "^16.1.6",
-		"prettier": "^3.6.2",
-		"typescript": "^5.9.2",
-		"vite": "^7.1.6",
+		"eslint": "^9.37.0",
+		"lint-staged": "^16.2.3",
+		"terser": "^5.44.0",
+		"typescript": "^5.9.3",
 		"vite-plugin-dts": "^4.5.4",
 		"vite-plugin-static-copy": "^3.1.2",
 		"vitepress": "^2.0.0-alpha.12",
-		"vue": "^3.5.21"
-	},
-	"scripts": {
-		"prepare": "husky || true",
-		"fix": "eslint --cache --fix . && prettier --write .",
-		"build": "vite build"
-	},
-	"lint-staged": {
-		"*.{js,ts,mts}": "eslint --cache --fix",
-		"*.{vue,js,ts,mts,json,md,css}": "prettier --write"
+		"vue": "^3.5.22"
 	},
 	"pnpm": {
+		"overrides": {
+			"vite": "npm:rolldown-vite@latest"
+		},
 		"peerDependencyRules": {
 			"ignoreMissing": [
 				"@algolia/client-search",
 				"search-insights"
 			]
 		}
+	},
+	"simple-git-hooks": {
+		"pre-commit": "npx lint-staged"
+	},
+	"lint-staged": {
+		"*": "eslint --fix"
 	}
 }

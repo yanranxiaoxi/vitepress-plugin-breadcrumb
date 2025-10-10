@@ -1,5 +1,5 @@
+import path from 'node:path';
 import vue from '@vitejs/plugin-vue';
-import path from 'path';
 import { defineConfig } from 'vite';
 import dts from 'vite-plugin-dts';
 import { viteStaticCopy } from 'vite-plugin-static-copy';
@@ -34,8 +34,8 @@ export default defineConfig({
 			external: ['vue', 'vitepress', 'vitepress/client', 'vitepress/theme', '@localSearchIndex', '@siteData'],
 			output: {
 				globals: {
-					vue: 'Vue',
-					vitepress: 'Vitepress',
+					'vue': 'Vue',
+					'vitepress': 'Vitepress',
 					'vitepress/client': 'VitepressClient',
 					'vitepress/theme': 'VitepressTheme',
 				},

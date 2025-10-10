@@ -2,7 +2,6 @@
 	"recommendations": [
 		"streetsidesoftware.code-spell-checker",
 		"editorconfig.editorconfig",
-		"esbenp.prettier-vscode",
 		"mhutchie.git-graph",
 		"vue.volar"
 	]

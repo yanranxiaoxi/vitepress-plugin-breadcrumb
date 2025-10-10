@@ -1,7 +1,9 @@
 <script setup lang="ts">
+import type { DefaultTheme } from 'vitepress/theme';
+import type { PropType, Ref } from 'vue';
 import { onContentUpdated, useData, withBase } from 'vitepress/client';
-import { type DefaultTheme, useLayout } from 'vitepress/theme';
-import { type PropType, type Ref, computed, ref } from 'vue';
+import { useLayout } from 'vitepress/theme';
+import { computed, ref } from 'vue';
 
 const props = defineProps({
 	breadcrumb: {
@@ -9,7 +11,8 @@ const props = defineProps({
 		default: false,
 		validator: (value: unknown) => {
 			// 类型验证
-			if (typeof value === 'boolean') return true;
+			if (typeof value === 'boolean')
+				return true;
 			return typeof value === 'object' && value !== null && 'homeLink' in value;
 		},
 	},
@@ -19,12 +22,14 @@ const props = defineProps({
 const isClient = typeof window !== 'undefined';
 
 const vpData = computed(() => {
-	if (!isClient) return { frontmatter: { value: {} }, page: { value: { filePath: '' } } };
+	if (!isClient)
+		return { frontmatter: { value: {} }, page: { value: { filePath: '' } } };
 	return useData();
 });
 
 const vpLayout = computed(() => {
-	if (!isClient) return { sidebar: { value: [] } };
+	if (!isClient)
+		return { sidebar: { value: [] } };
 	return useLayout();
 });
 
@@ -40,7 +45,7 @@ const breadcrumbHomeText = typeof breadcrumb === 'object' ? breadcrumb.homeText 
 if (breadcrumb === true || typeof breadcrumbHomeLink === 'string') {
 	function resolveFilePath(filePath: string): string {
 		if (!filePath.startsWith('/')) {
-			filePath = '/' + filePath;
+			filePath = `/${filePath}`;
 		}
 		if (filePath.endsWith('.md')) {
 			filePath = filePath.slice(0, filePath.length - 3);
@@ -57,14 +62,15 @@ if (breadcrumb === true || typeof breadcrumbHomeLink === 'string') {
 			breadcrumbItems.push({ text: item.text, link: item.link });
 			if (item.link === filePath) {
 				return true;
-			} else if (item.items && item.items.length >= 1) {
+			}
+			else if (item.items && item.items.length >= 1) {
 				if (resolveMatchedLink(filePath, item.items)) {
 					return true;
 				}
 			}
 			breadcrumbItems = breadcrumbItems.slice(0, breadcrumbItems.length - 1);
 		}
-		return;
+		return undefined;
 	}
 
 	const generateBreadcrumb = (): void => {
@@ -79,10 +85,12 @@ if (breadcrumb === true || typeof breadcrumbHomeLink === 'string') {
 			for (const [index, breadcrumbItem] of breadcrumbItems.entries()) {
 				if (breadcrumbItem.link && index < breadcrumbItems.length - 1) {
 					breadcrumbHtmlStr += `<div class="breadcrumb-item"><span><a href="${withBase(breadcrumbItem.link) + (breadcrumbItem.link.endsWith('/') ? '' : '.html')}">${breadcrumbItem.text}</a></span></div>`;
-				} else if (index === breadcrumbItems.length - 1) {
-					breadcrumbHtmlStr += '<div class="breadcrumb-item breadcrumb-item-current"><span>' + breadcrumbItem.text + '</span></div>';
-				} else {
-					breadcrumbHtmlStr += '<div class="breadcrumb-item"><span>' + breadcrumbItem.text + '</span></div>';
+				}
+				else if (index === breadcrumbItems.length - 1) {
+					breadcrumbHtmlStr += `<div class="breadcrumb-item breadcrumb-item-current"><span>${breadcrumbItem.text}</span></div>`;
+				}
+				else {
+					breadcrumbHtmlStr += `<div class="breadcrumb-item"><span>${breadcrumbItem.text}</span></div>`;
 				}
 				if (index < breadcrumbItems.length - 1) {
 					breadcrumbHtmlStr += `<div class="breadcrumb-symbol">${gtSvg}</div>`;
@@ -96,13 +104,14 @@ if (breadcrumb === true || typeof breadcrumbHomeLink === 'string') {
 	if (isClient) {
 		onContentUpdated(generateBreadcrumb);
 	}
-} else {
+}
+else {
 	breadcrumbHtml.value = '';
 }
 </script>
 
 <template>
-	<div class="breadcrumb" v-if="breadcrumb === true || typeof breadcrumbHomeLink === 'string'" v-html="breadcrumbHtml"></div>
+	<div v-if="breadcrumb === true || typeof breadcrumbHomeLink === 'string'" class="breadcrumb" v-html="breadcrumbHtml" />
 </template>
 
 <style>
