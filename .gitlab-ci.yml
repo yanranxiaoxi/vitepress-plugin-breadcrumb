@@ -2,9 +2,9 @@ stages:
   - build
   - publish
 
-#########################
+# #######################
 #         Build         #
-#########################
+# #######################
 
 build:
   stage: build
@@ -19,13 +19,13 @@ build:
     - pnpm install
     - pnpm run build
   artifacts:
-    name: "dist"
+    name: dist
     paths:
       - ./dist/
 
-#########################
+# #######################
 #        Publish        #
-#########################
+# #######################
 
 publish-npm:
   stage: publish
