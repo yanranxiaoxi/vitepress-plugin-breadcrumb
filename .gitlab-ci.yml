@@ -11,7 +11,7 @@ build:
   tags:
     - linux
     - docker
-  image: docker.io/library/node:23
+  image: docker.io/library/node:24
   rules:
     - if: $CI_COMMIT_TAG
   script:
@@ -32,7 +32,7 @@ publish-npm:
   tags:
     - linux
     - docker
-  image: docker.io/library/node:23
+  image: docker.io/library/node:24
   rules:
     - if: $CI_COMMIT_TAG
   script:
