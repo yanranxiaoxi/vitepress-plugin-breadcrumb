@@ -2,20 +2,13 @@ root = true
 
 [*]
 end_of_line = lf
-insert_final_newline = true
-trim_trailing_whitespace = true
 
-[*.{js,ts,mts,vue}]
+[*.{html,css,js,mjs,jsx,json,ts,mts,tsx,vue}]
 charset = utf-8
 indent_style = tab
 indent_size = 4
 
-[*.md]
+[*.{md,yml,yaml}]
 charset = utf-8
-indent_style = space
-indent_size = 2
-trim_trailing_whitespace = false
-
-[.gitlab-ci.yml]
 indent_style = space
 indent_size = 2

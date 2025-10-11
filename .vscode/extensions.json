@@ -3,6 +3,7 @@
 		"streetsidesoftware.code-spell-checker",
 		"editorconfig.editorconfig",
 		"mhutchie.git-graph",
-		"vue.volar"
+		"vue.volar",
+		"dbaeumer.vscode-eslint"
 	]
 }

@@ -4,12 +4,11 @@
 /src/
 /.editorconfig
 /.eslintcache
-/.eslintrc.js
 /.gitignore
 /.gitlab-ci.yml
-/.prettierignore
-/.prettierrc.js
+/eslint.config.mjs
 /pnpm-lock.yaml
 /tsconfig.json
 /vite.config.ts
 cache/
+debug.log
