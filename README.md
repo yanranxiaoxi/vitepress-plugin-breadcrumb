@@ -17,8 +17,10 @@ npm install vitepress-plugin-breadcrumb
 In `.vitepress/theme/index.ts` file:
 
 ```typescript
-import Breadcrumb from 'vitepress-plugin-breadcrumb/Breadcrumb.vue';
+import Breadcrumb from 'vitepress-plugin-breadcrumb';
 import DefaultTheme from 'vitepress/theme';
+
+import 'vitepress-plugin-breadcrumb/style.css';
 
 export default {
 	extends: DefaultTheme,
@@ -38,14 +40,14 @@ Vitepress's `doc-before` slot is used here to embed the Breadcrumb component at 
 ### Global:
 
 ```typescript
-type BreadcrumbOptions = {
+interface BreadcrumbOptions {
 	breadcrumb:
 		| boolean
 		| {
-				homeLink: string;
-				homeText?: string;
-		  };
-};
+			homeLink: string;
+			homeText?: string;
+		};
+}
 ```
 
 You can pass a Boolean value to the `breadcrumb` property, which indicates that breadcrumb navigation is enabled or disabled globally. Like:
@@ -70,8 +72,8 @@ breadcrumb: true
 
 ```yaml
 breadcrumb:
-    homeLink: /en/
-    homeText: Home
+  homeLink: /en/
+  homeText: Home
 ```
 
 When Breadcrumb is enabled globally, you can disable it on a specific page:

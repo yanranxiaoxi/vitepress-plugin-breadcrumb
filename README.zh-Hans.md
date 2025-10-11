@@ -17,8 +17,10 @@ npm install vitepress-plugin-breadcrumb
 在 `.vitepress/theme/index.ts` 文件内
 
 ```typescript
-import Breadcrumb from 'vitepress-plugin-breadcrumb/Breadcrumb.vue';
+import Breadcrumb from 'vitepress-plugin-breadcrumb';
 import DefaultTheme from 'vitepress/theme';
+
+import 'vitepress-plugin-breadcrumb/style.css';
 
 export default {
 	extends: DefaultTheme,
@@ -38,14 +40,14 @@ export default {
 ### 全局：
 
 ```typescript
-type BreadcrumbOptions = {
+interface BreadcrumbOptions {
 	breadcrumb:
 		| boolean
 		| {
-				homeLink: string;
-				homeText?: string;
-		  };
-};
+			homeLink: string;
+			homeText?: string;
+		};
+}
 ```
 
 您可以将布尔值传递给 `breadcrumb` 属性，这表示全局启用或禁用面包屑导航。例如：
@@ -70,8 +72,8 @@ breadcrumb: true
 
 ```yaml
 breadcrumb:
-    homeLink: /en/
-    homeText: Home
+  homeLink: /en/
+  homeText: Home
 ```
 
 当 Breadcrumb 全局启用时，您可以在特定页面上禁用它：

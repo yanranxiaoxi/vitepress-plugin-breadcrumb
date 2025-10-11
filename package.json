@@ -27,7 +27,8 @@
 		"./Breadcrumb.vue": {
 			"types": "./dist/types/Breadcrumb.vue.d.ts",
 			"import": "./dist/Breadcrumb.vue"
-		}
+		},
+		"./style.css": "./dist/vitepress-plugin-breadcrumb.css"
 	},
 	"main": "./dist/vitepress-plugin-breadcrumb.umd.js",
 	"module": "./dist/vitepress-plugin-breadcrumb.es.mjs",
