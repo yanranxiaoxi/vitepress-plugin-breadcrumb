@@ -43,7 +43,18 @@ const breadcrumbHomeLink = typeof breadcrumb === 'object' ? breadcrumb.homeLink 
 const breadcrumbHomeText = typeof breadcrumb === 'object' ? breadcrumb.homeText : undefined;
 
 if (breadcrumb === true || typeof breadcrumbHomeLink === 'string') {
-	function resolveFilePath(filePath: string): string {
+	function isExternalLink(link: string): boolean {
+		return /^[a-z]+:/i.test(link) || link.startsWith('//');
+	}
+
+	function normalizeContentPath(filePath: string): string {
+		if (isExternalLink(filePath) || filePath.startsWith('#')) {
+			return filePath;
+		}
+
+		const [pathname] = filePath.split(/[?#]/, 1);
+		filePath = pathname;
+
 		if (!filePath.startsWith('/')) {
 			filePath = `/${filePath}`;
 		}
@@ -56,11 +67,20 @@ if (breadcrumb === true || typeof breadcrumbHomeLink === 'string') {
 		return filePath;
 	}
 
+	function resolveBreadcrumbHref(link: string): string {
+		if (isExternalLink(link) || link.startsWith('#')) {
+			return link;
+		}
+
+		return withBase(link) + (link.endsWith('/') ? '' : '.html');
+	}
+
 	let breadcrumbItems: Array<{ text?: string; link?: string }> = [];
 	function resolveMatchedLink(filePath: string, items: Array<DefaultTheme.SidebarItem>): true | undefined {
 		for (const item of items) {
-			breadcrumbItems.push({ text: item.text, link: item.link });
-			if (item.link === filePath) {
+			const normalizedLink = item.link ? normalizeContentPath(item.link) : undefined;
+			breadcrumbItems.push({ text: item.text, link: normalizedLink });
+			if (normalizedLink === filePath) {
 				return true;
 			}
 			else if (item.items && item.items.length >= 1) {
@@ -74,17 +94,17 @@ if (breadcrumb === true || typeof breadcrumbHomeLink === 'string') {
 	}
 
 	const generateBreadcrumb = (): void => {
-		const filePath = resolveFilePath(page.value.filePath);
+		const filePath = normalizeContentPath(page.value.filePath);
 		breadcrumbItems = [];
 		if (typeof breadcrumb === 'object' && typeof breadcrumbHomeLink === 'string') {
-			breadcrumbItems.push({ text: breadcrumbHomeText || '🏠', link: breadcrumbHomeLink });
+			breadcrumbItems.push({ text: breadcrumbHomeText || '🏠', link: normalizeContentPath(breadcrumbHomeLink) });
 		}
 		resolveMatchedLink(filePath, sidebar.value);
 		let breadcrumbHtmlStr = '';
 		if (breadcrumbItems.length >= 2) {
 			for (const [index, breadcrumbItem] of breadcrumbItems.entries()) {
 				if (breadcrumbItem.link && index < breadcrumbItems.length - 1) {
-					breadcrumbHtmlStr += `<div class="breadcrumb-item"><span><a href="${withBase(breadcrumbItem.link) + (breadcrumbItem.link.endsWith('/') ? '' : '.html')}">${breadcrumbItem.text}</a></span></div>`;
+					breadcrumbHtmlStr += `<div class="breadcrumb-item"><span><a href="${resolveBreadcrumbHref(breadcrumbItem.link)}">${breadcrumbItem.text}</a></span></div>`;
 				}
 				else if (index === breadcrumbItems.length - 1) {
 					breadcrumbHtmlStr += `<div class="breadcrumb-item breadcrumb-item-current"><span>${breadcrumbItem.text}</span></div>`;

@@ -1,7 +1,7 @@
 {
 	"name": "vitepress-plugin-breadcrumb",
 	"type": "module",
-	"version": "3.0.2",
+	"version": "3.0.3",
 	"description": "Add Breadcrumb navigation to your Vitepress",
 	"author": "XiaoXi <admin@soraharu.com>",
 	"license": "MIT",
@@ -45,21 +45,20 @@
 		"dev:build": "vite build --watch --mode development"
 	},
 	"peerDependencies": {
-		"vitepress": "^1.6.0 || ^2.0.0-alpha.12",
-		"vue": "^3.5.0"
+		"vitepress": ">=1.6.0 <2 || >=2.0.0-alpha.12 <3"
 	},
 	"devDependencies": {
-		"@antfu/eslint-config": "^5.4.1",
-		"@types/node": "^24.7.0",
-		"@vitejs/plugin-vue": "^6.0.1",
-		"eslint": "^9.37.0",
-		"lint-staged": "^16.2.3",
-		"terser": "^5.44.0",
+		"@antfu/eslint-config": "^8.2.0",
+		"@types/node": "^25.6.0",
+		"@vitejs/plugin-vue": "^6.0.6",
+		"eslint": "^10.2.1",
+		"lint-staged": "^16.4.0",
+		"terser": "^5.46.2",
 		"typescript": "^5.9.3",
 		"vite-plugin-dts": "^4.5.4",
-		"vite-plugin-static-copy": "^3.1.2",
-		"vitepress": "^2.0.0-alpha.12",
-		"vue": "^3.5.22"
+		"vite-plugin-static-copy": "^4.1.0",
+		"vitepress": "^2.0.0-alpha.17",
+		"vue": "^3.5.33"
 	},
 	"pnpm": {
 		"overrides": {
