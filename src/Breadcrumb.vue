@@ -3,11 +3,13 @@ import type { DefaultTheme } from 'vitepress/theme';
 import type { PropType, Ref } from 'vue';
 import { onContentUpdated, useData, withBase } from 'vitepress/client';
 import { useLayout } from 'vitepress/theme';
-import { computed, ref } from 'vue';
+import { computed, ref, watch } from 'vue';
+
+type BreadcrumbOption = boolean | { homeText?: string; homeLink: string };
 
 const props = defineProps({
 	breadcrumb: {
-		type: [Boolean, Object] as PropType<boolean | { homeText?: string; homeLink: string }>,
+		type: [Boolean, Object] as PropType<BreadcrumbOption>,
 		default: false,
 		validator: (value: unknown) => {
 			// 类型验证
@@ -18,120 +20,115 @@ const props = defineProps({
 	},
 });
 
-// 客户端检查，避免在 SSR 期间调用 VitePress API
 const isClient = typeof window !== 'undefined';
-
-const vpData = computed(() => {
-	if (!isClient)
-		return { frontmatter: { value: {} }, page: { value: { filePath: '' } } };
-	return useData();
-});
-
-const vpLayout = computed(() => {
-	if (!isClient)
-		return { sidebar: { value: [] } };
-	return useLayout();
-});
-
-const { frontmatter, page } = vpData.value;
-const { sidebar } = vpLayout.value;
+const { frontmatter, page } = useData();
+const { sidebar } = useLayout();
 const breadcrumbHtml: Ref<string> = ref('');
 const gtSvg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256"><polygon points="79.093,0 48.907,30.187 146.72,128 48.907,225.813 79.093,256 207.093,128" /></svg>`;
 
-const breadcrumb = (frontmatter.value as any).breadcrumb !== undefined ? (frontmatter.value as any).breadcrumb : props.breadcrumb;
-const breadcrumbHomeLink = typeof breadcrumb === 'object' ? breadcrumb.homeLink : undefined;
-const breadcrumbHomeText = typeof breadcrumb === 'object' ? breadcrumb.homeText : undefined;
+const breadcrumb = computed<BreadcrumbOption>(() => {
+	const frontmatterBreadcrumb = (frontmatter.value as any).breadcrumb;
+	return frontmatterBreadcrumb !== undefined ? frontmatterBreadcrumb : props.breadcrumb;
+});
+const breadcrumbHomeLink = computed(() => typeof breadcrumb.value === 'object' ? breadcrumb.value.homeLink : undefined);
+const breadcrumbHomeText = computed(() => typeof breadcrumb.value === 'object' ? breadcrumb.value.homeText : undefined);
+const shouldRenderBreadcrumb = computed(() => breadcrumb.value === true || typeof breadcrumbHomeLink.value === 'string');
 
-if (breadcrumb === true || typeof breadcrumbHomeLink === 'string') {
-	function isExternalLink(link: string): boolean {
-		return /^[a-z]+:/i.test(link) || link.startsWith('//');
-	}
+function isExternalLink(link: string): boolean {
+	return /^[a-z]+:/i.test(link) || link.startsWith('//');
+}
 
-	function normalizeContentPath(filePath: string): string {
-		if (isExternalLink(filePath) || filePath.startsWith('#')) {
-			return filePath;
-		}
-
-		const [pathname] = filePath.split(/[?#]/, 1);
-		filePath = pathname;
-
-		if (!filePath.startsWith('/')) {
-			filePath = `/${filePath}`;
-		}
-		if (filePath.endsWith('.md')) {
-			filePath = filePath.slice(0, filePath.length - 3);
-		}
-		if (filePath.endsWith('/index')) {
-			filePath = filePath.slice(0, filePath.length - 5);
-		}
+function normalizeContentPath(filePath: string): string {
+	if (isExternalLink(filePath) || filePath.startsWith('#')) {
 		return filePath;
 	}
 
-	function resolveBreadcrumbHref(link: string): string {
-		if (isExternalLink(link) || link.startsWith('#')) {
-			return link;
-		}
+	const [pathname] = filePath.split(/[?#]/, 1);
+	filePath = pathname;
 
-		return withBase(link) + (link.endsWith('/') ? '' : '.html');
+	if (!filePath.startsWith('/')) {
+		filePath = `/${filePath}`;
+	}
+	if (filePath.endsWith('.md')) {
+		filePath = filePath.slice(0, filePath.length - 3);
+	}
+	if (filePath.endsWith('/index')) {
+		filePath = filePath.slice(0, filePath.length - 5);
+	}
+	return filePath;
+}
+
+function resolveBreadcrumbHref(link: string): string {
+	if (isExternalLink(link) || link.startsWith('#')) {
+		return link;
 	}
 
-	let breadcrumbItems: Array<{ text?: string; link?: string }> = [];
-	function resolveMatchedLink(filePath: string, items: Array<DefaultTheme.SidebarItem>): true | undefined {
-		for (const item of items) {
-			const normalizedLink = item.link ? normalizeContentPath(item.link) : undefined;
-			breadcrumbItems.push({ text: item.text, link: normalizedLink });
-			if (normalizedLink === filePath) {
+	return withBase(link) + (link.endsWith('/') ? '' : '.html');
+}
+
+let breadcrumbItems: Array<{ text?: string; link?: string }> = [];
+function resolveMatchedLink(filePath: string, items: Array<DefaultTheme.SidebarItem>): true | undefined {
+	for (const item of items) {
+		const normalizedLink = item.link ? normalizeContentPath(item.link) : undefined;
+		breadcrumbItems.push({ text: item.text, link: normalizedLink });
+		if (normalizedLink === filePath) {
+			return true;
+		}
+		else if (item.items && item.items.length >= 1) {
+			if (resolveMatchedLink(filePath, item.items)) {
 				return true;
 			}
-			else if (item.items && item.items.length >= 1) {
-				if (resolveMatchedLink(filePath, item.items)) {
-					return true;
-				}
-			}
-			breadcrumbItems = breadcrumbItems.slice(0, breadcrumbItems.length - 1);
 		}
-		return undefined;
+		breadcrumbItems = breadcrumbItems.slice(0, breadcrumbItems.length - 1);
 	}
-
-	const generateBreadcrumb = (): void => {
-		const filePath = normalizeContentPath(page.value.filePath);
-		breadcrumbItems = [];
-		if (typeof breadcrumb === 'object' && typeof breadcrumbHomeLink === 'string') {
-			breadcrumbItems.push({ text: breadcrumbHomeText || '🏠', link: normalizeContentPath(breadcrumbHomeLink) });
-		}
-		resolveMatchedLink(filePath, sidebar.value);
-		let breadcrumbHtmlStr = '';
-		if (breadcrumbItems.length >= 2) {
-			for (const [index, breadcrumbItem] of breadcrumbItems.entries()) {
-				if (breadcrumbItem.link && index < breadcrumbItems.length - 1) {
-					breadcrumbHtmlStr += `<div class="breadcrumb-item"><span><a href="${resolveBreadcrumbHref(breadcrumbItem.link)}">${breadcrumbItem.text}</a></span></div>`;
-				}
-				else if (index === breadcrumbItems.length - 1) {
-					breadcrumbHtmlStr += `<div class="breadcrumb-item breadcrumb-item-current"><span>${breadcrumbItem.text}</span></div>`;
-				}
-				else {
-					breadcrumbHtmlStr += `<div class="breadcrumb-item"><span>${breadcrumbItem.text}</span></div>`;
-				}
-				if (index < breadcrumbItems.length - 1) {
-					breadcrumbHtmlStr += `<div class="breadcrumb-symbol">${gtSvg}</div>`;
-				}
-			}
-		}
-		breadcrumbHtml.value = breadcrumbHtmlStr;
-	};
-	generateBreadcrumb();
-
-	if (isClient) {
-		onContentUpdated(generateBreadcrumb);
-	}
+	return undefined;
 }
-else {
-	breadcrumbHtml.value = '';
+
+function generateBreadcrumb(): void {
+	if (!shouldRenderBreadcrumb.value) {
+		breadcrumbHtml.value = '';
+		return;
+	}
+
+	const filePath = normalizeContentPath(page.value.filePath);
+	breadcrumbItems = [];
+	if (typeof breadcrumb.value === 'object' && typeof breadcrumbHomeLink.value === 'string') {
+		breadcrumbItems.push({ text: breadcrumbHomeText.value || '🏠', link: normalizeContentPath(breadcrumbHomeLink.value) });
+	}
+	resolveMatchedLink(filePath, sidebar.value);
+	let breadcrumbHtmlStr = '';
+	if (breadcrumbItems.length >= 2) {
+		for (const [index, breadcrumbItem] of breadcrumbItems.entries()) {
+			if (breadcrumbItem.link && index < breadcrumbItems.length - 1) {
+				breadcrumbHtmlStr += `<a class="breadcrumb-item breadcrumb-item-link" href="${resolveBreadcrumbHref(breadcrumbItem.link)}"><span>${breadcrumbItem.text}</span></a>`;
+			}
+			else if (index === breadcrumbItems.length - 1) {
+				breadcrumbHtmlStr += `<div class="breadcrumb-item breadcrumb-item-current"><span>${breadcrumbItem.text}</span></div>`;
+			}
+			else {
+				breadcrumbHtmlStr += `<div class="breadcrumb-item"><span>${breadcrumbItem.text}</span></div>`;
+			}
+			if (index < breadcrumbItems.length - 1) {
+				breadcrumbHtmlStr += `<div class="breadcrumb-symbol">${gtSvg}</div>`;
+			}
+		}
+	}
+	breadcrumbHtml.value = breadcrumbHtmlStr;
+}
+
+watch(
+	[page, sidebar, frontmatter, () => props.breadcrumb],
+	generateBreadcrumb,
+	{ immediate: true, deep: true },
+);
+
+if (isClient) {
+	onContentUpdated(generateBreadcrumb);
 }
 </script>
 
 <template>
-	<div v-if="breadcrumb === true || typeof breadcrumbHomeLink === 'string'" class="breadcrumb" v-html="breadcrumbHtml" />
+	<div v-if="shouldRenderBreadcrumb" class="breadcrumb" v-html="breadcrumbHtml" />
 </template>
 
 <style>
@@ -151,17 +148,19 @@ else {
 	border-radius: 20px;
 }
 
-.breadcrumb .breadcrumb-item:has(a):hover {
-	background-color: var(--vp-custom-block-info-bg);
-	color: var(--vp-c-brand-1);
-}
-
-.breadcrumb .breadcrumb-item span a {
+.breadcrumb .breadcrumb-item-link {
+	color: inherit;
+	text-decoration: none;
 	font-weight: 500;
 	transition:
 		color 0.25s,
 		opacity 0.25s;
 	touch-action: manipulation;
+}
+
+.breadcrumb .breadcrumb-item-link:hover {
+	background-color: var(--vp-custom-block-info-bg);
+	color: var(--vp-c-brand-1);
 }
 
 .breadcrumb .breadcrumb-item-current {
